@@ -1,0 +1,6 @@
+# ads.txt untuk Google AdSense
+# GANTI "pub-XXXXXXXXXXXXXXXX" dengan Publisher ID Anda setelah disetujui AdSense.
+# Publisher ID ada di dashboard AdSense > Account > Account information.
+#
+# Format: <domain>, <publisher_id>, <account_type>, <cert_authority_id>
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

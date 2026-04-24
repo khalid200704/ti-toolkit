@@ -1,0 +1,19 @@
+# robots.txt untuk TI Toolkit
+# https://ti-toolkit.com/
+
+User-agent: *
+Allow: /
+Disallow:
+
+# Sitemap
+Sitemap: https://ti-toolkit.com/sitemap.xml
+
+# Crawlers khusus
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
