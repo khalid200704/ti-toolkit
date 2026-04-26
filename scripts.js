@@ -9,6 +9,16 @@ const val = (id) => {
 
 const destroyChart = (chart) => { if (chart) chart.destroy(); };
 
+function loadChartJS() {
+  return new Promise(resolve => {
+    if (typeof Chart !== 'undefined') { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
+    s.onload = resolve;
+    document.head.appendChild(s);
+  });
+}
+
 let fcChart, bepChart, stChart;
 
 function resultItem(label, value, primary = false) {
@@ -42,7 +52,7 @@ function copyResults(prefix) {
     const value = item.querySelector('.value')?.textContent?.trim() || '';
     text += `${label}: ${value}\n`;
   });
-  text += `\nti-toolkit.com`;
+  text += `\nkhalid200704.github.io`;
   navigator.clipboard.writeText(text).then(() => {
     showCopyFeedback(prefix);
   }).catch(() => {
@@ -154,7 +164,7 @@ function calcSS() {
 }
 
 // ============ Forecasting ============
-function calcForecast() {
+async function calcForecast() {
   const method = document.getElementById('fc-method').value;
   const param = document.getElementById('fc-param').value;
   const data = parseList(document.getElementById('fc-data').value);
@@ -222,6 +232,7 @@ function calcForecast() {
   document.getElementById('fc-result').classList.remove('hidden');
 
   // Chart
+  await loadChartJS();
   const labels = forecasts.map(f => 'P' + f.t);
   const actualValues = forecasts.map(f => f.actual);
   const forecastValues = forecasts.map(f => parseFloat(f.forecast.toFixed(2)));
@@ -269,7 +280,7 @@ function calcForecast() {
 }
 
 // ============ BEP ============
-function calcBEP() {
+async function calcBEP() {
   const FC = val('bep-fc'), P = val('bep-p'), VC = val('bep-vc'), profit = val('bep-profit') || 0;
   if (!(FC > 0 && P > VC)) return alert('FC harus > 0 dan harga jual harus lebih besar dari biaya variabel.');
   const marg = P - VC;
@@ -294,6 +305,7 @@ function calcBEP() {
   document.getElementById('bep-result').classList.remove('hidden');
 
   // Chart dengan lebih banyak titik untuk kurva mulus
+  await loadChartJS();
   const ctx = document.getElementById('bep-chart').getContext('2d');
   destroyChart(bepChart);
   const steps = 30;
@@ -551,7 +563,7 @@ function initStatTable() {
   [12, 14, 13, 15, 12, 16, 14, 13, 15, 14, 13, 12, 14, 15, 13].forEach(v => addStatRow(v));
 }
 
-function calcStats() {
+async function calcStats() {
   const inputs = document.querySelectorAll('.st-input-val');
   const data = Array.from(inputs).map(i => parseFloat(i.value)).filter(v => !isNaN(v));
   if (data.length < 2) return alert('Minimal 2 data valid diperlukan.');
@@ -596,6 +608,7 @@ function calcStats() {
   document.getElementById('st-result').classList.remove('hidden');
 
   // Control Chart
+  await loadChartJS();
   const ctx = document.getElementById('st-chart').getContext('2d');
   destroyChart(stChart);
   stChart = new Chart(ctx, {
